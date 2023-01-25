@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "6934870364",
+    "project_id": "insulin-pump-a86ff",
+    "storage_bucket": "insulin-pump-a86ff.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:6934870364:android:6db49a3a308e911614e999",
+        "android_client_info": {
+          "package_name": "com.example.insulin_pump"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "6934870364-jc5ros8u6s0filain0ah85sroiv4nloc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxow99wz06RKGUiJxM91hCgv8J6dCi80U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "6934870364-jc5ros8u6s0filain0ah85sroiv4nloc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
