@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:insulin_pump/widgets/Record.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({
@@ -35,8 +36,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
               Map<String, dynamic> data =
                   document.data()! as Map<String, dynamic>;
               return ListTile(
-                title: Text(data['Date']), // 👈 Your valid data here
-              );
+                  title: Record(date: data['Date'], value: data['value']));
             }).toList());
           },
         ),
