@@ -19,8 +19,8 @@ class AppTheme {
   static const Color dismissibleBackground = Color(0xFF364A54);
   static const Color spacer = Color(0xFFF2F2F2);
 
-  static const Color primaryColor = Color(0xFF255ED6);
-  static const Color secondaryColor = Color(0xFF255ED6);
+  static const Color primaryColor = Color(0xFF2633C5);
+  static const Color secondaryColor = Color(0xfffea41d);
   static const Color dangerColor = Color(0xFFE85050);
   static const Color successColor = Color.fromARGB(255, 70, 187, 75);
 
@@ -59,20 +59,47 @@ class AppTheme {
     color: nearlyWhite,
   );
 
-  static const TextStyle body2 = TextStyle(
+  static const TextStyle bodyPrimary = TextStyle(
     fontFamily: fontName,
-    fontWeight: FontWeight.w400,
-    fontSize: 14,
-    letterSpacing: 0.2,
-    color: nearlyWhite,
-  );
-
-  static const TextStyle body1 = TextStyle(
-    fontFamily: fontName,
-    fontWeight: FontWeight.w400,
+    fontWeight: FontWeight.w500,
     fontSize: 16,
     letterSpacing: -0.05,
-    color: nearlyWhite,
+    color: primaryColor,
+  );
+  static const TextStyle bodyPrimaryLg = TextStyle(
+    fontFamily: fontName,
+    fontWeight: FontWeight.w500,
+    fontSize: 32,
+    letterSpacing: -0.05,
+    color: primaryColor,
+  );
+  static const TextStyle bodySecondary = TextStyle(
+    fontFamily: fontName,
+    fontWeight: FontWeight.w500,
+    fontSize: 16,
+    letterSpacing: -0.05,
+    color: secondaryColor,
+  );
+  static const TextStyle bodySecondaryLg = TextStyle(
+    fontFamily: fontName,
+    fontWeight: FontWeight.w500,
+    fontSize: 32,
+    letterSpacing: -0.05,
+    color: secondaryColor,
+  );
+  static const TextStyle bodyBlack = TextStyle(
+    fontFamily: fontName,
+    fontWeight: FontWeight.w500,
+    fontSize: 16,
+    letterSpacing: -0.05,
+    color: darkText,
+  );
+  static const TextStyle bodyBlackMd = TextStyle(
+    fontFamily: fontName,
+    fontWeight: FontWeight.w500,
+    fontSize: 24,
+    letterSpacing: -0.05,
+    color: darkText,
   );
 
   static const TextStyle caption = TextStyle(
@@ -84,4 +111,14 @@ class AppTheme {
   );
 
   static const defaultPadding = 16.0;
+}
+
+extension ColorExtension on String {
+  toColor() {
+    var hexString = this;
+    final buffer = StringBuffer();
+    if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
+    buffer.write(hexString.replaceFirst('#', ''));
+    return Color(int.parse(buffer.toString(), radix: 16));
+  }
 }
