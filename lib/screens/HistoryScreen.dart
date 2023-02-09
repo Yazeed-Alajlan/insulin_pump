@@ -2,6 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:insulin_pump/widgets/Record.dart';
+import 'dart:math';
+import 'package:calendar_appbar/calendar_appbar.dart';
+import 'package:intl/intl.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({
@@ -15,13 +18,34 @@ class HistoryScreen extends StatefulWidget {
 }
 
 class _HistoryScreenState extends State<HistoryScreen> {
+  DateTime? selectedDate;
+  Random random = new Random();
+
+  @override
+  void initState() {
+    setState(() {
+      selectedDate = DateTime.now();
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CalendarAppBar(
+        onDateChanged: (value) => setState(() => selectedDate = value),
+        lastDate: DateTime.now(),
+        events: List.generate(
+            100,
+            (index) => DateTime.now()
+                .subtract(Duration(days: index * random.nextInt(5)))),
+      ),
       body: Center(
         child: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection('Records') // 👈 Your desired collection name here
+              .where("Date",
+                  isEqualTo: DateFormat('yyyy-MM-dd').format(selectedDate!))
               .snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {

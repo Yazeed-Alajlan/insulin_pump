@@ -28,6 +28,22 @@ class Record extends StatelessWidget {
     //     ),
     //   ),
     // );
+    List months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'April',
+      'May',
+      'Jun',
+      'July',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
+    ];
+
+    DateTime currentDate = new DateTime.now();
 
     return Container(
       child: Padding(
@@ -53,9 +69,10 @@ class Record extends StatelessWidget {
               data:
                   Theme.of(context).copyWith(dividerColor: Colors.transparent),
               child: ExpansionTile(
+                // ignore: sort_child_properties_last
                 children: <Widget>[
-                  ReadingCard(value, "123"),
-                  ReadingCard(value, "123"),
+                  ReadingCard(value, "105"),
+                  ReadingCard(value, "140"),
                 ],
                 title: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -67,18 +84,16 @@ class Record extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.end,
+                          // ignore: prefer_const_literals_to_create_immutables
                           children: <Widget>[
                             Padding(
                               padding: EdgeInsets.only(left: 4, bottom: 3),
-                              child: Text(value,
+                              child: Text(
+                                  months[currentDate.month + 1] +
+                                      " - " +
+                                      currentDate.year.toString(),
                                   textAlign: TextAlign.center,
                                   style: AppTheme.bodyPrimaryLg),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 8, bottom: 8),
-                              child: Text('sugar',
-                                  textAlign: TextAlign.center,
-                                  style: AppTheme.bodyPrimary),
                             ),
                           ],
                         ),
@@ -89,20 +104,6 @@ class Record extends StatelessWidget {
                               Icons.access_time,
                               color: AppTheme.grey.withOpacity(0.5),
                               size: 16,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 4.0),
-                              child: Text(
-                                'Today 8:26 AM',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontFamily: AppTheme.fontName,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 14,
-                                  letterSpacing: 0.0,
-                                  color: AppTheme.grey.withOpacity(0.5),
-                                ),
-                              ),
                             ),
                           ],
                         )
