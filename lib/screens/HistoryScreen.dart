@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:insulin_pump/utils/AppTheme.dart';
+import 'package:insulin_pump/utils/CustomBackground.dart';
+import 'package:insulin_pump/widgets/ReadingCard.dart';
 import 'package:insulin_pump/widgets/Record.dart';
 import 'dart:math';
 import 'package:calendar_appbar/calendar_appbar.dart';
@@ -33,36 +36,43 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CalendarAppBar(
+        accent: AppTheme.primaryColor,
+        backButton: false,
         onDateChanged: (value) => setState(() => selectedDate = value),
         lastDate: DateTime.now(),
-        events: List.generate(
-            100,
-            (index) => DateTime.now()
-                .subtract(Duration(days: index * random.nextInt(5)))),
+        // events: List.generate(
+        //     100,
+        //     (index) => DateTime.now()
+        //         .subtract(Duration(days: index * random.nextInt(5)))),
       ),
-      body: Center(
-        child: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection('Records') // 👈 Your desired collection name here
-              .where("Date",
-                  isEqualTo: DateFormat('yyyy-MM-dd').format(selectedDate!))
-              .snapshots(),
-          builder:
-              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (snapshot.hasError) {
-              return const Text('Something went wrong');
-            }
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Text("Loading");
-            }
-            return ListView(
-                children: snapshot.data!.docs.map((DocumentSnapshot document) {
-              Map<String, dynamic> data =
-                  document.data()! as Map<String, dynamic>;
-              return ListTile(
-                  title: Record(date: data['Date'], value: data['value']));
-            }).toList());
-          },
+      extendBodyBehindAppBar: true,
+      body: CustomPaint(
+        // painter: CustomBackground(),
+        child: Center(
+          child: StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection('Records') // 👈 Your desired collection name here
+                .where("Date",
+                    isEqualTo: DateFormat('yyyy-MM-dd').format(selectedDate!))
+                .snapshots(),
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.hasError) {
+                return const Text('Something went wrong');
+              }
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Text("Loading");
+              }
+              return ListView(
+                  // itemExtent: 100.0,
+                  children:
+                      snapshot.data!.docs.map((DocumentSnapshot document) {
+                Map<String, dynamic> data =
+                    document.data()! as Map<String, dynamic>;
+                return ReadingCard(data['value'], data['Date']);
+              }).toList());
+            },
+          ),
         ),
       ),
     );

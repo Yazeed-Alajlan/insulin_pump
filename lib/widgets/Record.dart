@@ -28,22 +28,6 @@ class Record extends StatelessWidget {
     //     ),
     //   ),
     // );
-    List months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'April',
-      'May',
-      'Jun',
-      'July',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec'
-    ];
-
-    DateTime currentDate = new DateTime.now();
 
     return Container(
       child: Padding(
@@ -72,7 +56,6 @@ class Record extends StatelessWidget {
                 // ignore: sort_child_properties_last
                 children: <Widget>[
                   ReadingCard(value, "105"),
-                  ReadingCard(value, "140"),
                 ],
                 title: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -88,10 +71,7 @@ class Record extends StatelessWidget {
                           children: <Widget>[
                             Padding(
                               padding: EdgeInsets.only(left: 4, bottom: 3),
-                              child: Text(
-                                  months[currentDate.month + 1] +
-                                      " - " +
-                                      currentDate.year.toString(),
+                              child: Text(date,
                                   textAlign: TextAlign.center,
                                   style: AppTheme.bodyPrimaryLg),
                             ),
