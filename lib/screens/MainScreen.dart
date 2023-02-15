@@ -1,11 +1,9 @@
-import 'package:firebase_database/firebase_database.dart';
 import 'package:insulin_pump/screens/HistoryScreen.dart';
-import 'package:insulin_pump/screens/InjectionScreen.dart';
+import 'package:insulin_pump/screens/Injection/InjectionScreen.dart';
 import 'package:insulin_pump/utils/AppTheme.dart';
 import 'package:insulin_pump/utils/TabIconData.dart';
 import 'package:insulin_pump/widgets/BottomNavigation.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -31,7 +29,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
       tab.isSelected = false;
     }
     tabIconsList[0].isSelected = true;
-    tabBody = HistoryScreen(animationController: animationController);
+    tabBody = InjectionScreen(animationController: animationController);
   }
 
   @override

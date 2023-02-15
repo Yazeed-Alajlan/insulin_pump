@@ -1,11 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:insulin_pump/utils/AppTheme.dart';
-import 'package:insulin_pump/utils/CustomBackground.dart';
 import 'package:insulin_pump/widgets/ReadingCard.dart';
-import 'package:insulin_pump/widgets/Record.dart';
-import 'dart:math';
 import 'package:calendar_appbar/calendar_appbar.dart';
 import 'package:intl/intl.dart';
 
@@ -22,7 +18,6 @@ class HistoryScreen extends StatefulWidget {
 
 class _HistoryScreenState extends State<HistoryScreen> {
   DateTime? selectedDate;
-  Random random = new Random();
 
   @override
   void initState() {

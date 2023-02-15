@@ -13,7 +13,7 @@ Container Button(BuildContext context, String title, Function onTap) {
       },
       child: Text(
         title,
-        style: AppTheme.body(size: 24, color: AppTheme.darkText),
+        style: AppTheme.body(size: "md", color: AppTheme.darkText),
       ),
       style: ButtonStyle(
           backgroundColor: MaterialStateProperty.resolveWith((states) {

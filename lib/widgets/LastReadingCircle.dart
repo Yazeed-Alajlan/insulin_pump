@@ -38,7 +38,7 @@ class LastReadingCircle extends StatelessWidget {
                     Text(
                       lastReadingValue.toString(),
                       textAlign: TextAlign.center,
-                      style: AppTheme.bodyPrimaryLg,
+                      style: AppTheme.bodyPrimary(size: "lg"),
                     ),
                     // ignore: prefer_const_constructors
                     Text(

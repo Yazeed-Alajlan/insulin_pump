@@ -4,22 +4,31 @@ import 'package:insulin_pump/utils/AppTheme.dart';
 Widget ReadingCard(String value, String time) {
   return Container(
     height: 85,
+    decoration: BoxDecoration(
+        border: Border(
+            bottom: BorderSide(
+                color: AppTheme.darkGrey.withOpacity(0.6), width: 1))),
     child: Padding(
       padding: const EdgeInsets.all(AppTheme.defaultPadding + 4),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(value, textAlign: TextAlign.center, style: AppTheme.bodyBlackLg),
+          Text(value,
+              textAlign: TextAlign.center,
+              style: AppTheme.bodyBlack(size: "lg")),
           Row(
             children: [
-              Icon(
-                Icons.access_time,
-                color: AppTheme.grey.withOpacity(0.5),
-                size: 16,
+              Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: Icon(
+                  Icons.access_time,
+                  color: AppTheme.grey.withOpacity(0.6),
+                  size: 20,
+                ),
               ),
               Text(
-                time,
-                style: AppTheme.bodyBlackMd,
+                "08:00 AM",
+                style: AppTheme.bodyBlack(size: "md"),
               )
             ],
           ),

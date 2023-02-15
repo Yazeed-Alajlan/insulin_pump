@@ -11,8 +11,10 @@ class AppTheme {
   static const Color darkGrey = Color(0xFF313A44);
 
   static const Color darkText = Color(0xFF253840);
-  static const Color darkerText = Color(0xFF17262A);
+  static const Color whiteText = Color(0xFFFAFAFA);
   static const Color lightText = Color(0xFF4A6572);
+
+  static const Color darkerText = Color(0xFF17262A);
   static const Color deactivatedText = Color(0xFF767676);
   static const Color dismissibleBackground = Color(0xFF364A54);
 
@@ -22,6 +24,7 @@ class AppTheme {
   static const Color nearlyBlue = Color(0xFF00B6F0);
 
   static const Color primaryColor = Color(0xFF2633C5);
+  static const Color primaryColorLight = Color(0xFF6A88E5);
   static const Color secondaryColor = Color(0xfffea41d);
 
   // Green
@@ -35,6 +38,14 @@ class AppTheme {
   static const Color successColor = Color(0xFF42ba96);
   static const Color warningColor = Color(0xFFffc107);
   static const Color dangerColor = Color(0xFFdf4759);
+
+  static const BoxDecoration primaryColorGradient = BoxDecoration(
+    color: AppTheme.primaryColor,
+    gradient: LinearGradient(colors: <Color>[
+      primaryColor,
+      primaryColorLight,
+    ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+  );
 
   static const String fontName = 'Roboto';
 
@@ -71,117 +82,73 @@ class AppTheme {
     color: nearlyWhite,
   );
 
-  static TextStyle bodyBlack({required double size}) {
+  static TextStyle bodyWhite({required String size, bool? bold}) {
+    return TextStyle(
+      fontFamily: fontName,
+      color: whiteText,
+      fontSize: size == "lg"
+          ? 32
+          : size == "md"
+              ? 24
+              : size == "xlg"
+                  ? 48
+                  : 18,
+      fontWeight:
+          bold == null || bold == false ? FontWeight.w500 : FontWeight.bold,
+    );
+  }
+
+  static TextStyle bodyBlack({required String size, bool? bold}) {
     return TextStyle(
       fontFamily: fontName,
       color: darkText,
-      fontSize: size,
-      fontWeight: FontWeight.w500,
+      fontSize: size == "lg"
+          ? 32
+          : size == "md"
+              ? 24
+              : size == "xlg"
+                  ? 48
+                  : 18,
+      fontWeight:
+          bold == null || bold == false ? FontWeight.w500 : FontWeight.bold,
+      letterSpacing: 1,
     );
   }
 
-  static TextStyle bodyWhite({required double size}) {
+  static TextStyle bodyPrimary({required String size, bool? bold}) {
     return TextStyle(
       fontFamily: fontName,
-      color: nearlyWhite,
-      fontSize: size,
-      fontWeight: FontWeight.w500,
+      color: primaryColor,
+      fontSize: size == "lg"
+          ? 32
+          : size == "md"
+              ? 24
+              : size == "xlg"
+                  ? 48
+                  : 18,
+      fontWeight:
+          bold == null || bold == false ? FontWeight.w500 : FontWeight.bold,
+      letterSpacing: 1,
     );
   }
 
-  static TextStyle body({required double size, required Color color}) {
+  static TextStyle body(
+      {required String size, required Color color, bool? bold}) {
     return TextStyle(
       fontFamily: fontName,
       color: color,
-      fontSize: size,
-      fontWeight: FontWeight.w500,
+      fontSize: size == "lg"
+          ? 32
+          : size == "md"
+              ? 24
+              : size == "xlg"
+                  ? 48
+                  : 18,
+      fontWeight:
+          bold == null || bold == false ? FontWeight.w500 : FontWeight.bold,
+      letterSpacing: 1,
     );
   }
-
-  static const TextStyle bodyPrimarySm = TextStyle(
-    fontFamily: fontName,
-    fontWeight: FontWeight.w500,
-    fontSize: 16,
-    letterSpacing: -0.05,
-    color: primaryColor,
-  );
-  static const TextStyle bodyPrimaryMd = TextStyle(
-    fontFamily: fontName,
-    fontWeight: FontWeight.w500,
-    fontSize: 24,
-    letterSpacing: -0.05,
-    color: primaryColor,
-  );
-  static const TextStyle bodyPrimaryLg = TextStyle(
-    fontFamily: fontName,
-    fontWeight: FontWeight.w500,
-    fontSize: 32,
-    letterSpacing: -0.05,
-    color: primaryColor,
-  );
-  static const TextStyle bodySecondarySm = TextStyle(
-    fontFamily: fontName,
-    fontWeight: FontWeight.w500,
-    fontSize: 16,
-    letterSpacing: -0.05,
-    color: secondaryColor,
-  );
-  static const TextStyle bodySecondaryMd = TextStyle(
-    fontFamily: fontName,
-    fontWeight: FontWeight.w500,
-    fontSize: 24,
-    letterSpacing: -0.05,
-    color: secondaryColor,
-  );
-  static const TextStyle bodySecondaryLg = TextStyle(
-    fontFamily: fontName,
-    fontWeight: FontWeight.w500,
-    fontSize: 32,
-    letterSpacing: -0.05,
-    color: secondaryColor,
-  );
-  static const TextStyle bodyBlackSm = TextStyle(
-    fontFamily: fontName,
-    fontWeight: FontWeight.w500,
-    fontSize: 16,
-    letterSpacing: -0.05,
-    color: darkText,
-  );
-  static const TextStyle bodyBlackMd = TextStyle(
-    fontFamily: fontName,
-    fontWeight: FontWeight.w500,
-    fontSize: 24,
-    letterSpacing: -0.05,
-    color: darkText,
-  );
-  static const TextStyle bodyBlackLg = TextStyle(
-    fontFamily: fontName,
-    fontWeight: FontWeight.w500,
-    fontSize: 32,
-    letterSpacing: -0.05,
-    color: darkText,
-  );
-  static const TextStyle bodyWhiteSm = TextStyle(
-    fontFamily: fontName,
-    fontWeight: FontWeight.w500,
-    fontSize: 16,
-    letterSpacing: -0.05,
-    color: nearlyWhite,
-  );
-  static const TextStyle bodyWhiteMd = TextStyle(
-    fontFamily: fontName,
-    fontWeight: FontWeight.w500,
-    fontSize: 24,
-    letterSpacing: -0.05,
-    color: nearlyWhite,
-  );
-  static const TextStyle bodyWhiteLg = TextStyle(
-    fontFamily: fontName,
-    fontWeight: FontWeight.w500,
-    fontSize: 32,
-    letterSpacing: -0.05,
-    color: nearlyWhite,
-  );
 
   static const TextStyle caption = TextStyle(
     fontFamily: fontName,

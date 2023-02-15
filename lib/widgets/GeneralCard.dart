@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:insulin_pump/utils/AppTheme.dart';
-import 'package:insulin_pump/widgets/ReadingCard.dart';
 
 class GeneralCard extends StatefulWidget {
   final double value;
@@ -25,7 +24,6 @@ class _GeneralCardState extends State<GeneralCard> {
     value = widget.value;
     text = widget.text;
     color = widget.color;
-    print("helllllllllllo");
     super.initState();
   }
 
@@ -57,11 +55,11 @@ class _GeneralCardState extends State<GeneralCard> {
           children: [
             Text(
               "${widget.value}",
-              style: AppTheme.body(size: 32, color: this.color),
+              style: AppTheme.body(size: "lg", color: color),
             ),
             Text(
-              this.text,
-              style: AppTheme.body(size: 18, color: this.color),
+              text,
+              style: AppTheme.body(size: "sm", color: color),
             )
           ],
         ),
