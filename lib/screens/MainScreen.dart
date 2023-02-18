@@ -1,4 +1,4 @@
-import 'package:insulin_pump/screens/HistoryScreen.dart';
+import 'package:insulin_pump/screens/History/HistoryScreen.dart';
 import 'package:insulin_pump/screens/Injection/InjectionScreen.dart';
 import 'package:insulin_pump/utils/AppTheme.dart';
 import 'package:insulin_pump/utils/TabIconData.dart';
@@ -28,7 +28,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     for (final TabIconData tab in tabIconsList) {
       tab.isSelected = false;
     }
-    tabIconsList[0].isSelected = true;
+    // tabIconsList[0].isSelected = true;
     tabBody = InjectionScreen(animationController: animationController);
   }
 

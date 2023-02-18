@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:insulin_pump/utils/AppTheme.dart';
-import 'package:insulin_pump/utils/Constants.dart';
 
 class ProgressVertical extends StatelessWidget {
   final int value;

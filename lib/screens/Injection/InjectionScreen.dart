@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:insulin_pump/screens/Authentication/SignInScreen.dart';
 import 'package:insulin_pump/screens/Injection/custom_clipper.dart';
 import 'package:insulin_pump/screens/Injection/grid_item.dart';
 import 'package:insulin_pump/screens/Injection/progress_vertical.dart';
@@ -53,6 +55,7 @@ class _InjectionScreenState extends State<InjectionScreen> {
                     left: AppTheme.defaultPadding),
                 child: Column(
                   children: [
+                    // ----------TOP----------//
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -69,7 +72,7 @@ class _InjectionScreenState extends State<InjectionScreen> {
                               textBaseline: TextBaseline.alphabetic,
                               children: <Widget>[
                                 Text(
-                                  "105",
+                                  "40",
                                   style: AppTheme.bodyWhite(size: "xlg"),
                                 ),
                                 const SizedBox(width: 10),
@@ -99,8 +102,11 @@ class _InjectionScreenState extends State<InjectionScreen> {
                         ),
                       ],
                     ),
+                    // ----------Chart----------//
                     Padding(
-                      padding: const EdgeInsets.all(AppTheme.defaultPadding),
+                      padding: const EdgeInsets.all(
+                        AppTheme.defaultPadding,
+                      ),
                       child: Material(
                         shadowColor: Colors.grey.withOpacity(0.01), // added
                         type: MaterialType.card,
@@ -113,30 +119,30 @@ class _InjectionScreenState extends State<InjectionScreen> {
                           child: Column(
                             children: <Widget>[
                               // Rest Active Legend
-                              // Row(
-                              //   mainAxisAlignment: MainAxisAlignment.start,
-                              //   children: <Widget>[
-                              //     Container(
-                              //       margin: EdgeInsets.all(10.0),
-                              //       width: 10,
-                              //       height: 10,
-                              //       decoration: BoxDecoration(
-                              //           color: Constants.lightGreen,
-                              //           shape: BoxShape.circle),
-                              //     ),
-                              //     Text("Rest"),
-                              //     Container(
-                              //       margin: EdgeInsets.only(
-                              //           left: 10.0, right: 10.0),
-                              //       width: 10,
-                              //       height: 10,
-                              //       decoration: BoxDecoration(
-                              //           color: Constants.darkGreen,
-                              //           shape: BoxShape.circle),
-                              //     ),
-                              //     Text("Active"),
-                              //   ],
-                              // ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  Container(
+                                    margin: EdgeInsets.all(10.0),
+                                    width: 10,
+                                    height: 10,
+                                    decoration: BoxDecoration(
+                                        color: AppTheme.primaryColor,
+                                        shape: BoxShape.circle),
+                                  ),
+                                  Text("Daily Readings"),
+                                  // Container(
+                                  //   margin: EdgeInsets.only(
+                                  //       left: 10.0, right: 10.0),
+                                  //   width: 10,
+                                  //   height: 10,
+                                  //   decoration: BoxDecoration(
+                                  //       color: Constants.darkGreen,
+                                  //       shape: BoxShape.circle),
+                                  // ),
+                                  // Text("Active"),
+                                ],
+                              ),
                               SizedBox(height: 20),
                               // Main Cards - Heartbeat and Blood Pressure
                               Padding(
@@ -215,84 +221,96 @@ class _InjectionScreenState extends State<InjectionScreen> {
                               ),
                             ],
                           ),
-                        ), // added
+                        ),
                       ),
                     ),
+                    // ----------Cards----------//
+                    Container(
+                      // ignore: unnecessary_new
+                      child: new GridView.builder(
+                        padding: EdgeInsets.all(AppTheme.defaultPadding),
+                        shrinkWrap: true,
+                        primary: false,
+                        physics: NeverScrollableScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: crossAxisCount,
+                          crossAxisSpacing: crossAxisSpacing,
+                          mainAxisSpacing: mainAxisSpacing,
+                          childAspectRatio: aspectRatio,
+                        ),
+                        itemCount: 4,
+                        itemBuilder: (BuildContext context, int index) {
+                          switch (index) {
+                            case 0:
+                              return GridItem(
+                                  status: "Average",
+                                  time: "",
+                                  value: "140",
+                                  unit: "avg bpm",
+                                  color: AppTheme.successColor,
+                                  image: null,
+                                  remarks: "ok");
+                            case 1:
+                              return GridItem(
+                                  status: "Mmximum",
+                                  time: "",
+                                  value: "190",
+                                  unit: "avg bpm",
+                                  color: AppTheme.dangerColor,
+                                  image: null,
+                                  remarks: "ok");
+                            case 2:
+                              return GridItem(
+                                  status: "Minuimum",
+                                  time: "",
+                                  value: "80",
+                                  unit: "avg bpm",
+                                  color: AppTheme.warningColor,
+                                  image: null,
+                                  remarks: "Fit");
+                            case 3:
+                              return GridItem(
+                                  status: "Number of Injects",
+                                  time: "",
+                                  value: "",
+                                  unit: "",
+                                  color: Constants.darkOrange,
+                                  image: "assets/icons/syringe.png",
+                                  remarks: "10");
+                            default:
+                              return GridItem(
+                                status: "Rest",
+                                time: "4h 45m",
+                                value: "76",
+                                unit: "avg bpm",
+                                image: null,
+                                remarks: "ok",
+                                color: Constants.darkOrange,
+                              );
+                          }
+                        },
+                      ),
+                    ),
+                    SizedBox(height: 100),
                   ],
                 ),
               ),
             ],
           ),
-
-          // Chart
-
-          SizedBox(height: 30),
           Container(
-            // ignore: unnecessary_new
-            child: new GridView.builder(
-              shrinkWrap: true,
-              primary: false,
-              physics: NeverScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: crossAxisCount,
-                crossAxisSpacing: crossAxisSpacing,
-                mainAxisSpacing: mainAxisSpacing,
-                childAspectRatio: aspectRatio,
-              ),
-              itemCount: 4,
-              itemBuilder: (BuildContext context, int index) {
-                switch (index) {
-                  case 0:
-                    return GridItem(
-                        status: "Rest",
-                        time: "4h 45m",
-                        value: "76",
-                        unit: "avg bpm",
-                        color: Constants.darkGreen,
-                        image: null,
-                        remarks: "ok");
-                  case 1:
-                    return GridItem(
-                        status: "Active",
-                        time: "30m",
-                        value: "82",
-                        unit: "avg bpm",
-                        color: Constants.darkOrange,
-                        image: null,
-                        remarks: "ok");
-                  case 2:
-                    return GridItem(
-                        status: "Fitness Level",
-                        time: "",
-                        value: "82",
-                        unit: "avg bpm",
-                        color: Constants.darkOrange,
-                        image: "assets/icons/Heart.png",
-                        remarks: "Fit");
-                  case 3:
-                    return GridItem(
-                        status: "Endurance",
-                        time: "",
-                        value: "82",
-                        unit: "avg bpm",
-                        color: Constants.darkOrange,
-                        image: "assets/icons/Battery.png",
-                        remarks: "Ok");
-                  default:
-                    return GridItem(
-                      status: "Rest",
-                      time: "4h 45m",
-                      value: "76",
-                      unit: "avg bpm",
-                      image: null,
-                      remarks: "ok",
-                      color: Constants.darkOrange,
-                    );
-                }
+            height: 500,
+            alignment: Alignment.topCenter,
+            child: ElevatedButton(
+              child: Text("Logout"),
+              onPressed: () {
+                FirebaseAuth.instance.signOut().then((value) {
+                  print("Signed Out");
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => SignInScreen()));
+                });
               },
             ),
           ),
-          SizedBox(height: 500),
         ],
       ),
     );

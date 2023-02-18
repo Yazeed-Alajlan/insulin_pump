@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:insulin_pump/utils/AppTheme.dart';
-import 'package:insulin_pump/widgets/ReadingCard.dart';
+import 'package:insulin_pump/utils/Constants.dart';
 import 'package:calendar_appbar/calendar_appbar.dart';
 import 'package:intl/intl.dart';
 
@@ -30,6 +30,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Constants.backgroundColor,
       appBar: CalendarAppBar(
         accent: AppTheme.primaryColor,
         backButton: false,
@@ -72,30 +73,50 @@ class _HistoryScreenState extends State<HistoryScreen> {
       ),
     );
   }
+}
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     body: Center(
-  //         child: FutureBuilder<QuerySnapshot>(
-  //       future: FirebaseFirestore.instance
-  //           .collection('Records') // 👈 Your collection name here
-  //           .get(),
-  //       builder: (_, snapshot) {
-  //         if (snapshot.hasError) return Text('Error = ${snapshot.error}');
-  //         if (snapshot.connectionState == ConnectionState.waiting) {
-  //           return const Text("Loading");
-  //         }
-  //         return ListView(
-  //             children: snapshot.data!.docs.map((DocumentSnapshot document) {
-  //           Map<String, dynamic> data =
-  //               document.data()! as Map<String, dynamic>;
-  //           return ListTile(
-  //             title: Text(data['value']), // 👈 Your valid data here
-  //           );
-  //         }).toList());
-  //       },
-  //     )),
-  //   );
-  // }
+Widget ReadingCard(String value, String time) {
+  String time = "08:00 AM";
+  if (value == "92") {
+    time = "08:10 AM";
+  }
+  if (value == "94") {
+    time = "08:05 AM";
+  }
+  return Padding(
+    padding: const EdgeInsets.all(AppTheme.defaultPadding),
+    child: Material(
+      shadowColor: Colors.grey.withOpacity(0.001), // added
+      type: MaterialType.card,
+      elevation: 5,
+      borderRadius: new BorderRadius.circular(16.0),
+      child: Padding(
+        padding: const EdgeInsets.all(AppTheme.defaultPadding),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(value,
+                textAlign: TextAlign.center,
+                style: AppTheme.bodyBlack(size: "lg")),
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: Icon(
+                    Icons.access_time,
+                    color: AppTheme.grey.withOpacity(0.6),
+                    size: 20,
+                  ),
+                ),
+                Text(
+                  time,
+                  style: AppTheme.bodyBlack(size: "md"),
+                )
+              ],
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
 }

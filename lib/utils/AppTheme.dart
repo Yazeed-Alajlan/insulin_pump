@@ -35,7 +35,7 @@ class AppTheme {
   static Color darkYellowColor = Color(0xFFffc107);
   static Color lightYellowColor = Color(0xFFFFDA7A);
 
-  static const Color successColor = Color(0xFF42ba96);
+  static const Color successColor = Color(0xFF3ABD6F);
   static const Color warningColor = Color(0xFFffc107);
   static const Color dangerColor = Color(0xFFdf4759);
 
