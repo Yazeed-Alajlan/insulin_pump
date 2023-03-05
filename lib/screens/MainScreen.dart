@@ -1,5 +1,6 @@
 import 'package:insulin_pump/screens/History/HistoryScreen.dart';
 import 'package:insulin_pump/screens/Injection/InjectionScreen.dart';
+import 'package:insulin_pump/screens/Settings/SettingsScreen.dart';
 import 'package:insulin_pump/utils/AppTheme.dart';
 import 'package:insulin_pump/utils/TabIconData.dart';
 import 'package:insulin_pump/widgets/BottomNavigation.dart';
@@ -95,12 +96,22 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                 }
                 return;
               });
-            } else if (index == 1 || index == 3) {
+            } else if (index == 1) {
               animationController.reverse().then<dynamic>((_) {
                 if (mounted) {
                   setState(() {
                     tabBody =
                         HistoryScreen(animationController: animationController);
+                  });
+                }
+                return;
+              });
+            } else if (index == 3) {
+              animationController.reverse().then<dynamic>((_) {
+                if (mounted) {
+                  setState(() {
+                    tabBody = SettingsScreen(
+                        animationController: animationController);
                   });
                 }
                 return;
