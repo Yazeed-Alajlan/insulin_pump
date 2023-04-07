@@ -2,6 +2,7 @@
 // All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -182,6 +183,7 @@ class CharacteristicTile extends StatelessWidget {
         print(
             "-----------------------------------------------------------------");
         print(utf8.decode(value!));
+        var mytimer;
         return ExpansionTile(
           title: ListTile(
             title: Column(
@@ -205,7 +207,12 @@ class CharacteristicTile extends StatelessWidget {
                   Icons.file_download,
                   color: Theme.of(context).iconTheme.color?.withOpacity(0.5),
                 ),
-                onPressed: onReadPressed,
+                onPressed: () => {
+                  mytimer = Timer.periodic(Duration(seconds: 1), (timer) {
+                    print("hi");
+                    onReadPressed;
+                  })
+                },
               ),
               IconButton(
                 icon: Icon(Icons.file_upload,

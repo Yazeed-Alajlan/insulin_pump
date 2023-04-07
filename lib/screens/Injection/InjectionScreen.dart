@@ -6,6 +6,8 @@ import 'package:insulin_pump/screens/Injection/grid_item.dart';
 import 'package:insulin_pump/screens/Injection/progress_vertical.dart';
 import 'package:insulin_pump/utils/AppTheme.dart';
 import 'package:insulin_pump/utils/Constants.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 class InjectionScreen extends StatefulWidget {
   const InjectionScreen({
@@ -19,10 +21,66 @@ class InjectionScreen extends StatefulWidget {
 }
 
 class _InjectionScreenState extends State<InjectionScreen> {
+  static DateTime selectedDate = DateTime.now();
+  final Query<Map<String, dynamic>> _collectionRef = FirebaseFirestore.instance
+      .collection('Records')
+      .where("Date", isEqualTo: DateFormat('yyyy-MM-dd').format(selectedDate));
+
+  Future<Iterable<double>> getData() async {
+    // Get docs from collection reference
+    QuerySnapshot querySnapshot = await _collectionRef.get();
+
+    // Get data from docs and convert map to List
+    final allData = querySnapshot.docs.map((doc) => double.parse(doc["value"]));
+
+    return allData;
+  }
+
+  String max = "0";
+  String min = "0";
+  String average = "0";
+
+  @override
+  void initState() {
+    super.initState();
+    changeCardsValues();
+    // setState(() {
+    //   getData().then((value) => {
+    //         print(value),
+    //       });
+    //   max = "sd";
+    // });
+  }
+
+  void changeCardsValues() async {
+    var values = await getData();
+
+    var largest = values.first;
+    var smallest = values.first;
+    var sum = 0.0;
+    for (var i = 0; i < values.length; i++) {
+      sum = sum + values.elementAt(i);
+      // Checking for largest value in the list
+      if (values.elementAt(i) > largest) {
+        largest = values.elementAt(i);
+      }
+
+      // Checking for smallest value in the list
+      if (values.elementAt(i) < smallest) {
+        smallest = values.elementAt(i);
+      }
+    }
+
+    setState(() {
+      max = largest.toString();
+      min = smallest.toString();
+      average = (sum / values.length).toStringAsFixed(1);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double statusBarHeight = MediaQuery.of(context).padding.top;
-
     // For Grid Layout
     double crossAxisSpacing = 16, mainAxisSpacing = 16, _cellHeight = 150.0;
     int crossAxisCount = 2;
@@ -245,16 +303,16 @@ class _InjectionScreenState extends State<InjectionScreen> {
                               return GridItem(
                                   status: "Average",
                                   time: "",
-                                  value: "140",
+                                  value: average,
                                   unit: "avg bpm",
                                   color: AppTheme.successColor,
                                   image: null,
                                   remarks: "ok");
                             case 1:
                               return GridItem(
-                                  status: "Mmximum",
+                                  status: "Mamximum",
                                   time: "",
-                                  value: "190",
+                                  value: max,
                                   unit: "avg bpm",
                                   color: AppTheme.dangerColor,
                                   image: null,
@@ -263,7 +321,7 @@ class _InjectionScreenState extends State<InjectionScreen> {
                               return GridItem(
                                   status: "Minuimum",
                                   time: "",
-                                  value: "80",
+                                  value: min,
                                   unit: "avg bpm",
                                   color: AppTheme.warningColor,
                                   image: null,
@@ -304,7 +362,6 @@ class _InjectionScreenState extends State<InjectionScreen> {
               child: Text("Logout"),
               onPressed: () {
                 FirebaseAuth.instance.signOut().then((value) {
-                  print("Signed Out");
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => SignInScreen()));
                 });
