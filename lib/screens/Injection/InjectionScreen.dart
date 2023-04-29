@@ -7,6 +7,7 @@ import 'package:insulin_pump/screens/Injection/progress_vertical.dart';
 import 'package:insulin_pump/utils/AppTheme.dart';
 import 'package:insulin_pump/utils/Constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:insulin_pump/widgets/Button.dart';
 import 'package:intl/intl.dart';
 
 class InjectionScreen extends StatefulWidget {
@@ -39,10 +40,17 @@ class _InjectionScreenState extends State<InjectionScreen> {
   String max = "0";
   String min = "0";
   String average = "0";
+  int carbs = 0;
+  bool _textFieldHasFocus = false;
+  late final FocusNode _focusNode;
 
   @override
   void initState() {
     super.initState();
+    _focusNode = FocusNode();
+    _focusNode.addListener(() {
+      setState(() => _textFieldHasFocus = _focusNode.hasFocus);
+    });
     changeCardsValues();
     // setState(() {
     //   getData().then((value) => {
@@ -90,7 +98,8 @@ class _InjectionScreenState extends State<InjectionScreen> {
         crossAxisCount;
     double aspectRatio =
         _width / (_cellHeight + mainAxisSpacing + (crossAxisCount + 1));
-
+    const itemsSize = 70.0;
+    const animationDurationInMs = Duration(milliseconds: 250);
     return Scaffold(
       backgroundColor: Constants.backgroundColor,
       body: ListView(
@@ -350,6 +359,23 @@ class _InjectionScreenState extends State<InjectionScreen> {
                       ),
                     ),
                     SizedBox(height: 100),
+                    TextField(
+                      onChanged: (text) {
+                        carbs = int.parse(text);
+                      },
+                      decoration:
+                          InputDecoration(hintText: "Enter Carbs (grams)"),
+                    ),
+                    ElevatedButton(
+                        onPressed: () {},
+                        child: Text("Inject"),
+                        style: ElevatedButton.styleFrom(
+                            primary: Colors.red,
+                            onPrimary: Colors.white,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 25, vertical: 10),
+                            textStyle: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold)))
                   ],
                 ),
               ),
