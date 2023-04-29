@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:insulin_pump/screens/Connection/widgets.dart';
+import 'package:insulin_pump/utils/AppTheme.dart';
 
 class ConnectionScreen extends StatefulWidget {
   const ConnectionScreen({
@@ -71,6 +72,7 @@ class FindDevicesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: AppTheme.primaryColor,
         title: Text('Find Devices'),
       ),
       body: RefreshIndicator(
@@ -131,23 +133,27 @@ class FindDevicesScreen extends StatelessWidget {
           ),
         ),
       ),
-      floatingActionButton: StreamBuilder<bool>(
-        stream: FlutterBlue.instance.isScanning,
-        initialData: false,
-        builder: (c, snapshot) {
-          if (snapshot.data!) {
-            return FloatingActionButton(
-              child: Icon(Icons.stop),
-              onPressed: () => FlutterBlue.instance.stopScan(),
-              backgroundColor: Colors.red,
-            );
-          } else {
-            return FloatingActionButton(
-                child: Icon(Icons.search),
-                onPressed: () => FlutterBlue.instance
-                    .startScan(timeout: Duration(seconds: 4)));
-          }
-        },
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(right: 8,bottom: 72),
+        child: StreamBuilder<bool>(
+          stream: FlutterBlue.instance.isScanning,
+          initialData: false,
+          builder: (c, snapshot) {
+            if (snapshot.data!) {
+              return FloatingActionButton(
+                child: Icon(Icons.stop),
+                onPressed: () => FlutterBlue.instance.stopScan(),
+                backgroundColor: Colors.red,
+              );
+            } else {
+              return FloatingActionButton(
+                  backgroundColor: AppTheme.primaryColor,
+                  child: Icon(Icons.search),
+                  onPressed: () => FlutterBlue.instance
+                      .startScan(timeout: Duration(seconds: 4)));
+            }
+          },
+        ),
       ),
     );
   }
