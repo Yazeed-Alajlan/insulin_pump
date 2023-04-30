@@ -134,7 +134,7 @@ class FindDevicesScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(right: 8,bottom: 72),
+        padding: const EdgeInsets.only(right: 8, bottom: 72),
         child: StreamBuilder<bool>(
           stream: FlutterBlue.instance.isScanning,
           initialData: false,
@@ -180,10 +180,8 @@ class DeviceScreen extends StatelessWidget {
                     characteristic: c,
                     onReadPressed: () => c.read(),
                     onWritePressed: () async {
-                      await c.write(_getRandomBytes(), withoutResponse: true);
+                      await c.write(_getRandomBytes());
                       await c.read();
-                      print("READ");
-                      print(await c.read());
                     },
                     onNotificationPressed: () async {
                       await c.setNotifyValue(!c.isNotifying);

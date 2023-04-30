@@ -173,15 +173,14 @@ class CharacteristicTile extends StatelessWidget {
 // ---------------------------------------------------------------------READING---------------------------------------------------------------------
   @override
   Widget build(BuildContext context) {
+    print(" '0x${characteristic.uuid.toString().toUpperCase()}'");
     return StreamBuilder<List<int>>(
       stream: characteristic.value,
       initialData: characteristic.lastValue,
       builder: (c, snapshot) {
         // ignore: unused_local_variable
-
         final value = snapshot.data;
-        print(
-            "-----------------------------------------------------------------");
+        print("value is :");
         print(utf8.decode(value!));
         var mytimer;
         return ExpansionTile(
@@ -207,17 +206,23 @@ class CharacteristicTile extends StatelessWidget {
                   Icons.file_download,
                   color: Theme.of(context).iconTheme.color?.withOpacity(0.5),
                 ),
-                onPressed: () => {
-                  mytimer = Timer.periodic(Duration(seconds: 1), (timer) {
-                    print("hi");
-                    onReadPressed;
-                  })
-                },
+                onPressed: () => {onReadPressed}
+
+                //     {
+                //   mytimer = Timer.periodic(Duration(seconds: 4), (timer) {
+                //     print(value);
+                //     onReadPressed;
+                //   })
+                // }
+                ,
               ),
               IconButton(
                 icon: Icon(Icons.file_upload,
                     color: Theme.of(context).iconTheme.color?.withOpacity(0.5)),
-                onPressed: onWritePressed,
+                onPressed: () {
+                  characteristic.write(utf8.encode("3"));
+                  Navigator.pop(context);
+                },
               ),
               IconButton(
                 icon: Icon(
