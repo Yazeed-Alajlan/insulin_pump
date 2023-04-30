@@ -22,6 +22,15 @@ class InjectionScreen extends StatefulWidget {
 }
 
 class _InjectionScreenState extends State<InjectionScreen> {
+
+  String max = "0";
+  String min = "0";
+  String average = "0";
+  String last = "0";
+  int carbs = 0;
+  bool _textFieldHasFocus = false;
+  late final FocusNode _focusNode;
+
   static DateTime selectedDate = DateTime.now();
   final Query<Map<String, dynamic>> _collectionRef = FirebaseFirestore.instance
       .collection('Records')
@@ -37,12 +46,11 @@ class _InjectionScreenState extends State<InjectionScreen> {
     return allData;
   }
 
-  String max = "0";
-  String min = "0";
-  String average = "0";
-  int carbs = 0;
-  bool _textFieldHasFocus = false;
-  late final FocusNode _focusNode;
+   void addData(){
+FirebaseFirestore.instance.collection('Records').add({"Value": 40,"Date":"2023-04-29","createdAt": DateTime.now()});
+  }
+
+
 
   @override
   void initState() {
@@ -62,7 +70,6 @@ class _InjectionScreenState extends State<InjectionScreen> {
 
   void changeCardsValues() async {
     var values = await getData();
-
     var largest = values.first;
     var smallest = values.first;
     var sum = 0.0;
@@ -83,6 +90,10 @@ class _InjectionScreenState extends State<InjectionScreen> {
       max = largest.toString();
       min = smallest.toString();
       average = (sum / values.length).toStringAsFixed(1);
+      last= values.last.toString();
+//       FirebaseFirestore.instance
+// .collection('Records').orderBy("createdAt", descending: true).limit(1);
+
     });
   }
 
@@ -139,7 +150,7 @@ class _InjectionScreenState extends State<InjectionScreen> {
                               textBaseline: TextBaseline.alphabetic,
                               children: <Widget>[
                                 Text(
-                                  "40",
+                                 last,
                                   style: AppTheme.bodyWhite(size: "xlg"),
                                 ),
                                 const SizedBox(width: 10),
