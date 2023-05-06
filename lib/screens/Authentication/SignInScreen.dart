@@ -104,7 +104,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => MainScreen()));
+                                builder: (context) => HomeScreen()));
                       }).onError((error, stackTrace) {
                         ScaffoldMessenger.of(context)
                           ..hideCurrentSnackBar()

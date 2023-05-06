@@ -3,7 +3,6 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:insulin_pump/utils/AppTheme.dart';
-import 'package:insulin_pump/utils/Gobals.dart' as globals;
 
 class InjectionScreen extends StatefulWidget {
   const InjectionScreen({
@@ -15,7 +14,6 @@ class InjectionScreen extends StatefulWidget {
 
 class _InjectionScreenState extends State<InjectionScreen> {
   final TextEditingController _controller = TextEditingController();
-  bool flag = false;
 
   @override
   void dispose() {
@@ -25,9 +23,6 @@ class _InjectionScreenState extends State<InjectionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (globals.device == null) {
-      flag = true;
-    }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppTheme.primaryColor,
@@ -85,7 +80,6 @@ class _InjectionScreenState extends State<InjectionScreen> {
                       ),
                     ),
                   ),
-                  Text(flag ? "yes" : "no")
                 ],
               ),
             ),

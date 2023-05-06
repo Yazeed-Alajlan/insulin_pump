@@ -4,14 +4,14 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:insulin_pump/screens/Connection/widgets.dart';
+import 'package:insulin_pump/screens/MainScreen.dart';
 import 'package:insulin_pump/utils/AppTheme.dart';
+import 'package:insulin_pump/utils/Gobals.dart' as globals;
 
 class ConnectionScreen extends StatefulWidget {
   const ConnectionScreen({
-    required this.animationController,
     super.key,
   });
-  final AnimationController animationController;
   @override
   State<ConnectionScreen> createState() => _ConnectionScreenState();
 }
@@ -20,7 +20,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      color: Colors.lightBlue,
+      color: AppTheme.primaryColor,
       home: StreamBuilder<BluetoothState>(
           stream: FlutterBlue.instance.state,
           initialData: BluetoothState.unknown,
@@ -43,7 +43,7 @@ class BluetoothOffScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.lightBlue,
+      backgroundColor: AppTheme.primaryColor,
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -68,6 +68,21 @@ class BluetoothOffScreen extends StatelessWidget {
 }
 
 class FindDevicesScreen extends StatelessWidget {
+  Future<List<BluetoothCharacteristic>> discoverServices(
+      BluetoothDevice device) async {
+    List<BluetoothService> services = await device.discoverServices();
+    late BluetoothCharacteristic read, write;
+    services.forEach((service) {
+      service.characteristics.forEach((characteristic) {
+        if (characteristic.uuid.toString() ==
+            "7def8317-7301-4ee6-8849-46face74ca2a") read = characteristic;
+        if (characteristic.uuid.toString() ==
+            "7def8317-7302-4ee6-8849-46face74ca2a") write = characteristic;
+      });
+    });
+    return [read, write];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,7 +101,9 @@ class FindDevicesScreen extends StatelessWidget {
                     .asyncMap((_) => FlutterBlue.instance.connectedDevices),
                 initialData: [],
                 builder: (c, snapshot) => Column(
+                  // CHECK NAME
                   children: snapshot.data!
+                      .where((d) => d.name == "BLE_String")
                       .map((d) => ListTile(
                             title: Text(d.name),
                             subtitle: Text(d.id.toString()),
@@ -96,12 +113,13 @@ class FindDevicesScreen extends StatelessWidget {
                               builder: (c, snapshot) {
                                 if (snapshot.data ==
                                     BluetoothDeviceState.connected) {
+                                  globals.device = d;
                                   return ElevatedButton(
                                     child: Text('OPEN'),
                                     onPressed: () => Navigator.of(context).push(
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                DeviceScreen(device: d))),
+                                                MainScreen())),
                                   );
                                 }
                                 return Text(snapshot.data.toString());
@@ -116,17 +134,32 @@ class FindDevicesScreen extends StatelessWidget {
                 initialData: [],
                 builder: (c, snapshot) => Column(
                   children: snapshot.data!
+                      .where((r) => r.device.name == "BLE_String")
                       .map(
                         (r) => ScanResultTile(
                           result: r,
                           onTap: () => Navigator.of(context)
                               .push(MaterialPageRoute(builder: (context) {
                             r.device.connect();
-                            return DeviceScreen(device: r.device);
+                            globals.device = r.device;
+
+                            return MainScreen();
                           })),
                         ),
                       )
                       .toList(),
+                ),
+              ),
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    globals.device = null;
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => MainScreen()),
+                    );
+                  },
+                  child: Text('Continue Without Connection '),
                 ),
               ),
             ],
@@ -134,7 +167,7 @@ class FindDevicesScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(right: 8, bottom: 72),
+        padding: const EdgeInsets.only(right: 8, bottom: 64),
         child: StreamBuilder<bool>(
           stream: FlutterBlue.instance.isScanning,
           initialData: false,
@@ -171,6 +204,7 @@ class DeviceScreen extends StatelessWidget {
 
   List<Widget> _buildServiceTiles(List<BluetoothService> services) {
     return services
+        .where((s) => s.uuid.toString().toUpperCase().substring(4, 8) == "8317")
         .map(
           (s) => ServiceTile(
             service: s,

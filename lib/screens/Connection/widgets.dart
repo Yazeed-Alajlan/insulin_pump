@@ -2,11 +2,11 @@
 // All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:insulin_pump/utils/Gobals.dart' as globals;
 
 class ScanResultTile extends StatelessWidget {
   const ScanResultTile({Key? key, required this.result, this.onTap})
@@ -134,10 +134,10 @@ class ServiceTile extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text('Service '),
-            Text('0x${service.uuid.toString().toUpperCase()}',
-                style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                    color: Theme.of(context).textTheme.caption?.color))
+            Text('Service'),
+            Text(
+              '0x${service.uuid.toString().toUpperCase().substring(4, 8)}',
+            )
           ],
         ),
         children: characteristicTiles,
@@ -145,14 +145,11 @@ class ServiceTile extends StatelessWidget {
     } else {
       return ListTile(
         title: Text('Service'),
-        subtitle: Text('0x${service.uuid.toString().toUpperCase()}'),
+        subtitle:
+            Text('0x${service.uuid.toString().toUpperCase().substring(4, 8)}'),
       );
     }
   }
-}
-
-String _dataParser(List<int> dataFromDevice) {
-  return utf8.decode(dataFromDevice);
 }
 
 class CharacteristicTile extends StatelessWidget {
@@ -170,32 +167,29 @@ class CharacteristicTile extends StatelessWidget {
       this.onWritePressed,
       this.onNotificationPressed})
       : super(key: key);
-// ---------------------------------------------------------------------READING---------------------------------------------------------------------
+
+// ---------------------------------------------------------------------READING------------------------------------------------------
   @override
   Widget build(BuildContext context) {
-    print(" '0x${characteristic.uuid.toString().toUpperCase()}'");
     return StreamBuilder<List<int>>(
       stream: characteristic.value,
       initialData: characteristic.lastValue,
       builder: (c, snapshot) {
-        // ignore: unused_local_variable
         final value = snapshot.data;
-        print("value is :");
         print(utf8.decode(value!));
-        var mytimer;
-        return ExpansionTile(
+        return ListTile(
           title: ListTile(
             title: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text('Characteristic'),
-                Text('0x${characteristic.uuid.toString().toUpperCase()}',
-                    style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                        color: Theme.of(context).textTheme.caption?.color))
+                Text(
+                  '0x${characteristic.uuid.toString().toUpperCase().substring(4, 13)}',
+                )
               ],
             ),
-            subtitle: Text(utf8.decode(value!)),
+            subtitle: Text(value.toString()),
             contentPadding: EdgeInsets.all(0.0),
           ),
           trailing: Row(
@@ -206,22 +200,13 @@ class CharacteristicTile extends StatelessWidget {
                   Icons.file_download,
                   color: Theme.of(context).iconTheme.color?.withOpacity(0.5),
                 ),
-                onPressed: () => {onReadPressed}
-
-                //     {
-                //   mytimer = Timer.periodic(Duration(seconds: 4), (timer) {
-                //     print(value);
-                //     onReadPressed;
-                //   })
-                // }
-                ,
+                onPressed: onReadPressed,
               ),
               IconButton(
                 icon: Icon(Icons.file_upload,
                     color: Theme.of(context).iconTheme.color?.withOpacity(0.5)),
                 onPressed: () {
                   characteristic.write(utf8.encode("3"));
-                  Navigator.pop(context);
                 },
               ),
               IconButton(
@@ -234,7 +219,7 @@ class CharacteristicTile extends StatelessWidget {
               )
             ],
           ),
-          children: descriptorTiles,
+          // children: descriptorTiles,
         );
       },
     );
@@ -261,11 +246,9 @@ class DescriptorTile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text('Descriptor'),
-          Text('0x${descriptor.uuid.toString().toUpperCase().substring(4, 8)}',
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyText2
-                  ?.copyWith(color: Theme.of(context).textTheme.caption?.color))
+          Text(
+            '0x${descriptor.uuid.toString().toUpperCase().substring(4, 8)}',
+          )
         ],
       ),
       subtitle: StreamBuilder<List<int>>(
@@ -308,11 +291,9 @@ class AdapterStateTile extends StatelessWidget {
       child: ListTile(
         title: Text(
           'Bluetooth adapter is ${state.toString().substring(15)}',
-          style: Theme.of(context).primaryTextTheme.subtitle1,
         ),
         trailing: Icon(
           Icons.error,
-          color: Theme.of(context).primaryTextTheme.subtitle1?.color,
         ),
       ),
     );

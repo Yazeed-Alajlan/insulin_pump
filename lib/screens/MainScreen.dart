@@ -1,14 +1,19 @@
+import 'dart:async';
+
+import 'package:flutter_blue/flutter_blue.dart';
 import 'package:insulin_pump/screens/Connection/Connection.dart';
 import 'package:insulin_pump/screens/History/HistoryScreen.dart';
+import 'package:insulin_pump/screens/Home/HomeScreen.dart';
 import 'package:insulin_pump/screens/Injection/InjectionScreen.dart';
 import 'package:insulin_pump/screens/Settings/SettingsScreen.dart';
 import 'package:insulin_pump/utils/AppTheme.dart';
 import 'package:insulin_pump/utils/TabIconData.dart';
 import 'package:insulin_pump/widgets/BottomNavigation.dart';
 import 'package:flutter/material.dart';
+import 'package:insulin_pump/utils/Gobals.dart' as globals;
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+  const MainScreen({Key? key}) : super(key: key);
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -22,16 +27,50 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   );
 
   late final AnimationController animationController;
+  void discoverServices() async {
+    List<BluetoothService> services = await globals.device!.discoverServices();
+    late BluetoothCharacteristic read, write;
+    services.forEach((service) {
+      service.characteristics.forEach((characteristic) {
+        if (characteristic.uuid.toString() ==
+            "7def8317-7301-4ee6-8849-46face74ca2a")
+          globals.read = characteristic;
+        if (characteristic.uuid.toString() ==
+            "7def8317-7302-4ee6-8849-46face74ca2a")
+          globals.write = characteristic;
+      });
+    });
+  }
+  // Future<List<BluetoothCharacteristic>> discoverServices() async {
+  //   List<BluetoothService> services = await globals.device!.discoverServices();
+  //   late BluetoothCharacteristic read, write;
+  //   services.forEach((service) {
+  //     service.characteristics.forEach((characteristic) {
+  //       if (characteristic.uuid.toString() ==
+  //           "7def8317-7301-4ee6-8849-46face74ca2a") read = characteristic;
+  //       if (characteristic.uuid.toString() ==
+  //           "7def8317-7302-4ee6-8849-46face74ca2a") write = characteristic;
+  //     });
+  //   });
+  //   return [read, write];
+  // }
+
   @override
   void initState() {
     super.initState();
-    animationController = AnimationController(
-        duration: const Duration(milliseconds: 600), vsync: this);
     for (final TabIconData tab in tabIconsList) {
       tab.isSelected = false;
     }
+    animationController = AnimationController(
+        duration: const Duration(milliseconds: 600), vsync: this);
+    discoverServices();
+    tabBody = HomeScreen(animationController: animationController);
+
     // tabIconsList[0].isSelected = true;
-    tabBody = InjectionScreen(animationController: animationController);
+    // tabBody = InjectionScreen(
+    //   animationController: animationController,
+    //   device: widget.device,
+    // );
   }
 
   @override
@@ -42,6 +81,11 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    // const counter = const Duration(seconds: 15);
+    // // _fetchData() is your function to fetch data
+    // Timer.periodic(counter,
+    //     (Timer t) => print("hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii"));
+
     return Material(
       color: AppTheme.background,
       child: FutureBuilder<bool>(
@@ -79,8 +123,9 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
             animationController.reverse().then<dynamic>((_) {
               if (mounted) {
                 setState(() {
+                  discoverServices();
                   tabBody =
-                      InjectionScreen(animationController: animationController);
+                      HomeScreen(animationController: animationController);
                 });
               }
               return;
@@ -101,8 +146,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               animationController.reverse().then<dynamic>((_) {
                 if (mounted) {
                   setState(() {
-                    tabBody =
-                        HistoryScreen(animationController: animationController);
+                    tabBody = ConnectionScreen();
                   });
                 }
                 return;
@@ -111,10 +155,11 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               animationController.reverse().then<dynamic>((_) {
                 if (mounted) {
                   setState(() {
-                    tabBody = ConnectionScreen(
-                        animationController: animationController);
+                    discoverServices();
+                    tabBody = InjectionScreen();
                   });
                 }
+
                 return;
               });
             } else if (index == 3) {
