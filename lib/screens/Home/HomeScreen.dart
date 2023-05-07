@@ -42,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void addData() {
     FirebaseFirestore.instance
         .collection('Records')
-        .add({"Value": 40, "Date": "2023-04-29", "createdAt": DateTime.now()});
+        .add({"Value": 40, "Date": "2023-05-07", "createdAt": DateTime.now()});
   }
 
   @override
@@ -95,7 +95,6 @@ class _HomeScreenState extends State<HomeScreen> {
         _width / (_cellHeight + mainAxisSpacing + (crossAxisCount + 1));
     const itemsSize = 70.0;
     const animationDurationInMs = Duration(milliseconds: 250);
-
     return Scaffold(
       backgroundColor: Constants.backgroundColor,
       body: ListView(
@@ -140,24 +139,25 @@ class _HomeScreenState extends State<HomeScreen> {
                                       stream: globals.read!.value,
                                       initialData: globals.read!.lastValue,
                                       builder: (context, snapshot) {
-                                        var value = snapshot.data;
-                                        var lastreading =
-                                            utf8.decode(value!).toString();
+                                        var value = utf8
+                                            .decode(snapshot.data!)
+                                            .toString();
+
+                                        globals.lastReading = value;
                                         // print(lastreading);
                                         // if (double.tryParse(lastreading)! >=
                                         //     100) {
                                         //   // widget.write.write(utf8.encode("3"));
                                         // }
                                         globals.read!.read();
+
                                         return Text(
-                                          lastValue,
-                                          // utf8.decode(value!),
+                                          value,
                                           style:
                                               AppTheme.bodyWhite(size: "xlg"),
                                         );
                                       }),
-                                if (globals.device == null ||
-                                    globals.read == null)
+                                if (globals.device == null)
                                   Text(
                                     lastValue,
                                     // utf8.decode(value!),

@@ -27,20 +27,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   );
 
   late final AnimationController animationController;
-  void discoverServices() async {
-    List<BluetoothService> services = await globals.device!.discoverServices();
-    late BluetoothCharacteristic read, write;
-    services.forEach((service) {
-      service.characteristics.forEach((characteristic) {
-        if (characteristic.uuid.toString() ==
-            "7def8317-7301-4ee6-8849-46face74ca2a")
-          globals.read = characteristic;
-        if (characteristic.uuid.toString() ==
-            "7def8317-7302-4ee6-8849-46face74ca2a")
-          globals.write = characteristic;
-      });
-    });
-  }
+
   // Future<List<BluetoothCharacteristic>> discoverServices() async {
   //   List<BluetoothService> services = await globals.device!.discoverServices();
   //   late BluetoothCharacteristic read, write;
@@ -63,7 +50,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     }
     animationController = AnimationController(
         duration: const Duration(milliseconds: 600), vsync: this);
-    discoverServices();
+    // discoverServices();
     tabBody = HomeScreen(animationController: animationController);
 
     // tabIconsList[0].isSelected = true;
@@ -81,11 +68,6 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    // const counter = const Duration(seconds: 15);
-    // // _fetchData() is your function to fetch data
-    // Timer.periodic(counter,
-    //     (Timer t) => print("hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii"));
-
     return Material(
       color: AppTheme.background,
       child: FutureBuilder<bool>(
@@ -123,7 +105,6 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
             animationController.reverse().then<dynamic>((_) {
               if (mounted) {
                 setState(() {
-                  discoverServices();
                   tabBody =
                       HomeScreen(animationController: animationController);
                 });
@@ -155,7 +136,6 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               animationController.reverse().then<dynamic>((_) {
                 if (mounted) {
                   setState(() {
-                    discoverServices();
                     tabBody = InjectionScreen();
                   });
                 }

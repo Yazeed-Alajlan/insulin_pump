@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:insulin_pump/screens/Connection/Connection.dart';
 import 'package:insulin_pump/screens/MainScreen.dart';
 import 'package:insulin_pump/utils/AppTheme.dart';
-import 'package:insulin_pump/screens/HomeScreen.dart';
 import 'package:insulin_pump/screens/Authentication/SignUpScreen.dart';
 import 'package:insulin_pump/screens/Authentication/ResetPassword.dart';
 
@@ -104,7 +104,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => HomeScreen()));
+                                builder: (context) => ConnectionScreen()));
                       }).onError((error, stackTrace) {
                         ScaffoldMessenger.of(context)
                           ..hideCurrentSnackBar()

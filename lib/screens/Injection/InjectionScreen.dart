@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -74,7 +76,8 @@ class _InjectionScreenState extends State<InjectionScreen> {
                         backgroundColor: AppTheme.primaryColor),
                     onPressed: () {
                       double value = double.tryParse(_controller.text) ?? 0.0;
-                      print('The entered value is: $value');
+                      globals.write!.write(utf8.encode(value.toString()));
+                      _controller.clear();
                     },
                     child: Padding(
                       padding: const EdgeInsets.only(
@@ -85,7 +88,7 @@ class _InjectionScreenState extends State<InjectionScreen> {
                       ),
                     ),
                   ),
-                  Text(flag ? "yes" : "no")
+                  Text(flag ? "yes" : "no"),
                 ],
               ),
             ),

@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:insulin_pump/screens/Connection/DataScreen.dart';
 import 'package:insulin_pump/screens/Connection/widgets.dart';
 import 'package:insulin_pump/screens/MainScreen.dart';
 import 'package:insulin_pump/utils/AppTheme.dart';
@@ -19,19 +20,16 @@ class ConnectionScreen extends StatefulWidget {
 class _ConnectionScreenState extends State<ConnectionScreen> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      color: AppTheme.primaryColor,
-      home: StreamBuilder<BluetoothState>(
-          stream: FlutterBlue.instance.state,
-          initialData: BluetoothState.unknown,
-          builder: (c, snapshot) {
-            final state = snapshot.data;
-            if (state == BluetoothState.on) {
-              return FindDevicesScreen();
-            }
-            return BluetoothOffScreen(state: state);
-          }),
-    );
+    return StreamBuilder<BluetoothState>(
+        stream: FlutterBlue.instance.state,
+        initialData: BluetoothState.unknown,
+        builder: (c, snapshot) {
+          final state = snapshot.data;
+          if (state == BluetoothState.on) {
+            return FindDevicesScreen();
+          }
+          return BluetoothOffScreen(state: state);
+        });
   }
 }
 
@@ -116,10 +114,10 @@ class FindDevicesScreen extends StatelessWidget {
                                   globals.device = d;
                                   return ElevatedButton(
                                     child: Text('OPEN'),
-                                    onPressed: () => Navigator.of(context).push(
-                                        MaterialPageRoute(
+                                    onPressed: () => Navigator.of(context)
+                                        .pushReplacement(MaterialPageRoute(
                                             builder: (context) =>
-                                                MainScreen())),
+                                                DataScreen())),
                                   );
                                 }
                                 return Text(snapshot.data.toString());
@@ -138,12 +136,12 @@ class FindDevicesScreen extends StatelessWidget {
                       .map(
                         (r) => ScanResultTile(
                           result: r,
-                          onTap: () => Navigator.of(context)
-                              .push(MaterialPageRoute(builder: (context) {
+                          onTap: () => Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(builder: (context) {
                             r.device.connect();
                             globals.device = r.device;
 
-                            return MainScreen();
+                            return DataScreen();
                           })),
                         ),
                       )
@@ -154,9 +152,9 @@ class FindDevicesScreen extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     globals.device = null;
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => MainScreen()),
+                      MaterialPageRoute(builder: (context) => DataScreen()),
                     );
                   },
                   child: Text('Continue Without Connection '),

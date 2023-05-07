@@ -1,5 +1,5 @@
 import 'package:insulin_pump/screens/Authentication/SignInScreen.dart';
-import 'package:insulin_pump/screens/HomeScreen.dart';
+import 'package:insulin_pump/screens/Connection/Connection.dart';
 import 'package:insulin_pump/widgets/Button.dart';
 import 'package:insulin_pump/widgets/RoundedInputField.dart';
 import 'package:insulin_pump/widgets/SnackBarAlert.dart';
@@ -124,7 +124,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => HomeScreen()));
+                                builder: (context) => ConnectionScreen()));
                       }).onError((error, stackTrace) {
                         ScaffoldMessenger.of(context)
                           ..hideCurrentSnackBar()

@@ -54,19 +54,24 @@ class _HistoryScreenState extends State<HistoryScreen> {
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (snapshot.hasError) {
-                return const Text('Something went wrong');
+                return const Text('Something went wrong, check again later');
               }
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Text("Loading");
+                return const Text("Loading data");
               }
-              return ListView(
-                  // itemExtent: 100.0,
-                  children:
-                      snapshot.data!.docs.map((DocumentSnapshot document) {
-                Map<String, dynamic> data =
-                    document.data()! as Map<String, dynamic>;
-                return ReadingCard(data['value'], data['Date']);
-              }).toList());
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 62),
+                child: ListView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    // itemExtent: 100.0,
+                    children:
+                        snapshot.data!.docs.map((DocumentSnapshot document) {
+                      Map<String, dynamic> data =
+                          document.data()! as Map<String, dynamic>;
+                      return ReadingCard(data['Value'], data['Date']);
+                    }).toList()),
+              );
             },
           ),
         ),
@@ -77,12 +82,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
 Widget ReadingCard(String value, String time) {
   String time = "08:00 AM";
-  if (value == "92") {
-    time = "08:10 AM";
-  }
-  if (value == "94") {
-    time = "08:05 AM";
-  }
+
   return Padding(
     padding: const EdgeInsets.all(AppTheme.defaultPadding),
     child: Material(
