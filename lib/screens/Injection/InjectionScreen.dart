@@ -89,6 +89,7 @@ class _InjectionScreenState extends State<InjectionScreen> {
                     ),
                   ),
                   Text(flag ? "yes" : "no"),
+                  Text(globals.read.toString()),
                 ],
               ),
             ),

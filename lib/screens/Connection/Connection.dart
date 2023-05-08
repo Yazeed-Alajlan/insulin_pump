@@ -18,6 +18,8 @@ class ConnectionScreen extends StatefulWidget {
 }
 
 class _ConnectionScreenState extends State<ConnectionScreen> {
+  final Future<bool> _future = Future.delayed(Duration(seconds: 3), () => true);
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<BluetoothState>(
@@ -32,6 +34,28 @@ class _ConnectionScreenState extends State<ConnectionScreen> {
         });
   }
 }
+
+// Widget build(BuildContext context) {
+//   return FutureBuilder(
+//     future: _future,
+//     builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+//       if (snapshot.connectionState == ConnectionState.waiting) {
+//         return Center(child: CircularProgressIndicator());
+//       } else {
+//         return StreamBuilder<BluetoothState>(
+//             stream: FlutterBlue.instance.state,
+//             initialData: BluetoothState.unknown,
+//             builder: (c, snapshot) {
+//               final state = snapshot.data;
+//               if (state == BluetoothState.on) {
+//                 return FindDevicesScreen();
+//               }
+//               return BluetoothOffScreen(state: state);
+//             });
+//       }
+//     },
+//   );
+// }
 
 class BluetoothOffScreen extends StatelessWidget {
   const BluetoothOffScreen({Key? key, this.state}) : super(key: key);
@@ -66,19 +90,36 @@ class BluetoothOffScreen extends StatelessWidget {
 }
 
 class FindDevicesScreen extends StatelessWidget {
-  Future<List<BluetoothCharacteristic>> discoverServices(
-      BluetoothDevice device) async {
-    List<BluetoothService> services = await device.discoverServices();
-    late BluetoothCharacteristic read, write;
+  // Future<List<BluetoothCharacteristic>> discoverServices(
+  //     BluetoothDevice device) async {
+  //   List<BluetoothService> services = await device.discoverServices();
+  //   late BluetoothCharacteristic read, write;
+  //   services.forEach((service) {
+  //     service.characteristics.forEach((characteristic) {
+  //       if (characteristic.uuid.toString() ==
+  //           "7def8317-7301-4ee6-8849-46face74ca2a") read = characteristic;
+  //       if (characteristic.uuid.toString() ==
+  //           "7def8317-7302-4ee6-8849-46face74ca2a") write = characteristic;
+  //     });
+  //   });
+  //   return [read, write];
+  // }
+  void discoverServices(BluetoothDevice device) async {
+    print("COOOOOOOOOOOOOOOOOOOOOOOOONECTTTTION");
+    print(globals.device);
+    List<BluetoothService> services = await globals.device!.discoverServices();
+
     services.forEach((service) {
       service.characteristics.forEach((characteristic) {
         if (characteristic.uuid.toString() ==
-            "7def8317-7301-4ee6-8849-46face74ca2a") read = characteristic;
+            "7def8317-7301-4ee6-8849-46face74ca2a") {
+          globals.read = characteristic;
+        }
         if (characteristic.uuid.toString() ==
-            "7def8317-7302-4ee6-8849-46face74ca2a") write = characteristic;
+            "7def8317-7302-4ee6-8849-46face74ca2a")
+          globals.write = characteristic;
       });
     });
-    return [read, write];
   }
 
   @override
@@ -110,56 +151,66 @@ class FindDevicesScreen extends StatelessWidget {
                               initialData: BluetoothDeviceState.disconnected,
                               builder: (c, snapshot) {
                                 if (snapshot.data ==
-                                    BluetoothDeviceState.connected) {
+                                        BluetoothDeviceState.connected &&
+                                    globals.device == null) {
                                   globals.device = d;
                                   return ElevatedButton(
-                                    child: Text('OPEN'),
-                                    onPressed: () => Navigator.of(context)
-                                        .pushReplacement(MaterialPageRoute(
-                                            builder: (context) =>
-                                                DataScreen())),
-                                  );
+                                      child: Text('OPEN'),
+                                      onPressed: () => {
+                                            discoverServices(d),
+                                            Navigator.of(context)
+                                                .pushReplacement(
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            DataScreen(
+                                                              device: d,
+                                                            ))),
+                                          });
                                 }
-                                return Text(snapshot.data.toString());
+                                // return Text(snapshot.data.toString());
+                                return Text("Device is connected");
                               },
                             ),
                           ))
                       .toList(),
                 ),
               ),
-              StreamBuilder<List<ScanResult>>(
-                stream: FlutterBlue.instance.scanResults,
-                initialData: [],
-                builder: (c, snapshot) => Column(
-                  children: snapshot.data!
-                      .where((r) => r.device.name == "BLE_String")
-                      .map(
-                        (r) => ScanResultTile(
-                          result: r,
-                          onTap: () => Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(builder: (context) {
-                            r.device.connect();
-                            globals.device = r.device;
-
-                            return DataScreen();
-                          })),
-                        ),
-                      )
-                      .toList(),
+              if (globals.device == null)
+                StreamBuilder<List<ScanResult>>(
+                  stream: FlutterBlue.instance.scanResults,
+                  initialData: [],
+                  builder: (c, snapshot) => Column(
+                    children: snapshot.data!
+                        .where((r) => r.device.name == "BLE_String")
+                        .map(
+                          (r) => ScanResultTile(
+                              result: r,
+                              onTap: () => {
+                                    Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(builder: (context) {
+                                      r.device.connect();
+                                      globals.device = r.device;
+                                      discoverServices(r.device);
+                                      return DataScreen(device: r.device);
+                                    })),
+                                  }),
+                        )
+                        .toList(),
+                  ),
                 ),
-              ),
-              Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    globals.device = null;
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => DataScreen()),
-                    );
-                  },
-                  child: Text('Continue Without Connection '),
+              if (globals.device == null)
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      globals.device = null;
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => MainScreen()),
+                      );
+                    },
+                    child: Text('Continue Without Connection'),
+                  ),
                 ),
-              ),
             ],
           ),
         ),

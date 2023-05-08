@@ -7,3 +7,4 @@ BluetoothCharacteristic? read;
 BluetoothCharacteristic? write;
 
 String lastReading = "0";
+double counter = 0;
