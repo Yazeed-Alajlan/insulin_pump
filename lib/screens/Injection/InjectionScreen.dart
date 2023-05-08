@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:insulin_pump/utils/AppTheme.dart';
 import 'package:insulin_pump/utils/Gobals.dart' as globals;
+import 'package:insulin_pump/widgets/CustomAppBar.dart';
 
 class InjectionScreen extends StatefulWidget {
   const InjectionScreen({
@@ -31,12 +32,8 @@ class _InjectionScreenState extends State<InjectionScreen> {
       flag = true;
     }
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppTheme.primaryColor,
-        title: Text(
-          'Inject to the Pump ',
-          style: AppTheme.bodyWhite(size: "md"),
-        ),
+      appBar: CustomAppBar(
+        text: "Inject",
       ),
       body: Container(
         height: 400,
@@ -71,20 +68,35 @@ class _InjectionScreenState extends State<InjectionScreen> {
                     ),
                   ),
                   SizedBox(height: 16),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: AppTheme.primaryColor),
-                    onPressed: () {
-                      double value = double.tryParse(_controller.text) ?? 0.0;
-                      globals.write!.write(utf8.encode(value.toString()));
-                      _controller.clear();
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          left: 16, right: 16, top: 8, bottom: 8),
-                      child: Text(
-                        'Inject',
-                        style: AppTheme.bodyWhite(size: "md"),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: AppTheme.nearlyDarkBlue,
+                      gradient: const LinearGradient(colors: <Color>[
+                        AppTheme.nearlyDarkBlue,
+                        Color(0xFF6A88E5),
+                      ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        backgroundColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                      ),
+                      onPressed: () {
+                        double value = double.tryParse(_controller.text) ?? 0.0;
+                        globals.write!.write(utf8.encode(value.toString()));
+                        _controller.clear();
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 16, right: 16, top: 8, bottom: 8),
+                        child: Text(
+                          'Inject',
+                          style: AppTheme.bodyWhite(size: "md"),
+                        ),
                       ),
                     ),
                   ),

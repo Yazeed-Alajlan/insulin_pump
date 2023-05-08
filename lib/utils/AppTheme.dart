@@ -57,6 +57,14 @@ class AppTheme {
     height: 0.9,
     color: nearlyWhite,
   );
+  static const TextStyle headerMd = TextStyle(
+    fontFamily: fontName,
+    fontWeight: FontWeight.bold,
+    fontSize: 32,
+    letterSpacing: 0.4,
+    height: 0.9,
+    color: nearlyWhite,
+  );
 
   static const TextStyle headline = TextStyle(
     fontFamily: fontName,

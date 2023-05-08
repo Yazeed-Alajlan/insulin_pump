@@ -55,7 +55,6 @@ class _DataScreenState extends State<DataScreen> {
     Timer.periodic(Duration(seconds: 1), (timer) {
       if (globals.read == null) {
         discoverServices();
-
         timer.cancel();
       }
     });

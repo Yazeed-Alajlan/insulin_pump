@@ -8,6 +8,7 @@ import 'package:insulin_pump/screens/Connection/widgets.dart';
 import 'package:insulin_pump/screens/MainScreen.dart';
 import 'package:insulin_pump/utils/AppTheme.dart';
 import 'package:insulin_pump/utils/Gobals.dart' as globals;
+import 'package:insulin_pump/widgets/CustomAppBar.dart';
 
 class ConnectionScreen extends StatefulWidget {
   const ConnectionScreen({
@@ -65,7 +66,6 @@ class BluetoothOffScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.primaryColor,
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -105,8 +105,6 @@ class FindDevicesScreen extends StatelessWidget {
   //   return [read, write];
   // }
   void discoverServices(BluetoothDevice device) async {
-    print("COOOOOOOOOOOOOOOOOOOOOOOOONECTTTTION");
-    print(globals.device);
     List<BluetoothService> services = await globals.device!.discoverServices();
 
     services.forEach((service) {
@@ -125,9 +123,8 @@ class FindDevicesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppTheme.primaryColor,
-        title: Text('Find Devices'),
+      appBar: CustomAppBar(
+        text: "Find Devices",
       ),
       body: RefreshIndicator(
         onRefresh: () =>
@@ -228,11 +225,22 @@ class FindDevicesScreen extends StatelessWidget {
                 backgroundColor: Colors.red,
               );
             } else {
-              return FloatingActionButton(
-                  backgroundColor: AppTheme.primaryColor,
-                  child: Icon(Icons.search),
-                  onPressed: () => FlutterBlue.instance
-                      .startScan(timeout: Duration(seconds: 4)));
+              return Container(
+                decoration: BoxDecoration(
+                  color: AppTheme.nearlyDarkBlue,
+                  gradient: const LinearGradient(colors: <Color>[
+                    AppTheme.nearlyDarkBlue,
+                    Color(0xFF6A88E5),
+                  ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+                  shape: BoxShape.circle,
+                ),
+                child: FloatingActionButton(
+                    elevation: 0,
+                    backgroundColor: Colors.transparent,
+                    child: Icon(Icons.search),
+                    onPressed: () => FlutterBlue.instance
+                        .startScan(timeout: Duration(seconds: 4))),
+              );
             }
           },
         ),
