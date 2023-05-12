@@ -73,7 +73,7 @@ class _DataScreenState extends State<DataScreen> {
         setState(() {
           globals.lastReading = utf8.decode(value).toString();
         });
-        // addData();
+        addData();
       }
     });
     discoverServices();

@@ -195,17 +195,35 @@ class FindDevicesScreen extends StatelessWidget {
                         .toList(),
                   ),
                 ),
+              SizedBox(height: 300),
               if (globals.device == null)
                 Center(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      globals.device = null;
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => MainScreen()),
-                      );
-                    },
-                    child: Text('Continue Without Connection'),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: AppTheme.nearlyDarkBlue,
+                      gradient: const LinearGradient(colors: <Color>[
+                        AppTheme.nearlyDarkBlue,
+                        Color(0xFF6A88E5),
+                      ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        backgroundColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                      ),
+                      onPressed: () {
+                        globals.device = null;
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => MainScreen()),
+                        );
+                      },
+                      child: Text('Continue Without Connection'),
+                    ),
                   ),
                 ),
             ],

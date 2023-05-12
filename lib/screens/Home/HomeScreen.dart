@@ -144,23 +144,26 @@ class _HomeScreenState extends State<HomeScreen> {
                     document.data()! as Map<String, dynamic>;
                 return data;
               }).toList();
+              double max = 0, min = 0, sum = 0, average = 0;
+              String lastReading = "0";
+              if (allData.isNotEmpty) {
+                max = allData
+                    .map((object) => double.parse(object["Value"]))
+                    .reduce(
+                        (value, element) => value > element ? value : element);
 
-              double max = allData
-                  .map((object) => double.parse(object["Value"]))
-                  .reduce(
-                      (value, element) => value > element ? value : element);
+                min = allData
+                    .map((object) => double.parse(object["Value"]))
+                    .reduce(
+                        (value, element) => value < element ? value : element);
 
-              double min = allData
-                  .map((object) => double.parse(object["Value"]))
-                  .reduce(
-                      (value, element) => value < element ? value : element);
+                sum = allData
+                    .map((object) => double.parse(object["Value"]))
+                    .reduce((value, element) => value + element);
+                average = sum / allData.length;
 
-              double sum = allData
-                  .map((object) => double.parse(object["Value"]))
-                  .reduce((value, element) => value + element);
-              double average = sum / allData.length;
-
-              String lastReading = allData.first["Value"];
+                lastReading = allData.first["Value"];
+              }
 
               return ListView(
                 padding: EdgeInsets.zero,

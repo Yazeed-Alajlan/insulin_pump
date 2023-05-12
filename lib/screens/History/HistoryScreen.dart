@@ -50,6 +50,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 .collection('Records') // 👈 Your desired collection name here
                 .where("Date",
                     isEqualTo: DateFormat('yyyy-MM-dd').format(selectedDate!))
+                .orderBy("createdAt", descending: true)
                 .snapshots(),
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -64,12 +65,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 child: ListView(
                     physics: const AlwaysScrollableScrollPhysics(),
                     scrollDirection: Axis.vertical,
-                    // itemExtent: 100.0,
                     children:
                         snapshot.data!.docs.map((DocumentSnapshot document) {
                       Map<String, dynamic> data =
                           document.data()! as Map<String, dynamic>;
-                      return ReadingCard(data['Value'], data['Date']);
+                      return ReadingCard(data['Value'], data['createdAt']);
                     }).toList()),
               );
             },
@@ -80,8 +80,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 }
 
-Widget ReadingCard(String value, String time) {
-  String time = "08:00 AM";
+Widget ReadingCard(String value, Timestamp time) {
+  DateTime dateTime = time.toDate();
+  String formattedTime = DateFormat('HH:mm').format(dateTime);
 
   return Padding(
     padding: const EdgeInsets.all(AppTheme.defaultPadding),
@@ -109,7 +110,7 @@ Widget ReadingCard(String value, String time) {
                   ),
                 ),
                 Text(
-                  time,
+                  formattedTime,
                   style: AppTheme.bodyBlack(size: "md"),
                 )
               ],

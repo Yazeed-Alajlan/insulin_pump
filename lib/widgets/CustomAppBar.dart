@@ -7,7 +7,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 140.0,
+      height: 150.0,
       padding: EdgeInsets.only(bottom: 6.0),
       child: Container(
         height: double.infinity,
@@ -28,10 +28,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   spreadRadius: 2.0,
                   blurRadius: 12.0)
             ]),
-        child: Center(
-          child: Text(
-            text,
-            style: AppTheme.headerMd,
+        child: Padding(
+          padding: const EdgeInsets.only(top: 32),
+          child: Center(
+            child: Text(
+              text,
+              style: AppTheme.headerMd,
+            ),
           ),
         ),
       ),
