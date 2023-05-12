@@ -1,12 +1,11 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:flutter_blue/flutter_blue.dart';
 import 'package:insulin_pump/utils/AppTheme.dart';
 import 'package:insulin_pump/utils/Gobals.dart' as globals;
 import 'package:insulin_pump/widgets/CustomAppBar.dart';
+import 'package:intl/intl.dart';
 
 class InjectionScreen extends StatefulWidget {
   const InjectionScreen({
@@ -18,7 +17,17 @@ class InjectionScreen extends StatefulWidget {
 
 class _InjectionScreenState extends State<InjectionScreen> {
   final TextEditingController _controller = TextEditingController();
-  bool flag = false;
+
+  Future<bool> canInject() async {
+    DateTime now = DateTime.now().subtract(Duration(hours: 2));
+    QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection('Injections')
+        .where("injectedAt",
+            isGreaterThan: DateFormat('yyyy-MM-dd HH:mm').format(now))
+        .get();
+    List values = snapshot.docs.map((doc) => doc.data()).toList();
+    return values.isNotEmpty;
+  }
 
   @override
   void dispose() {
@@ -28,9 +37,6 @@ class _InjectionScreenState extends State<InjectionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (globals.device == null) {
-      flag = true;
-    }
     return Scaffold(
       appBar: CustomAppBar(
         text: "Inject",
@@ -85,10 +91,40 @@ class _InjectionScreenState extends State<InjectionScreen> {
                           borderRadius: BorderRadius.circular(20.0),
                         ),
                       ),
-                      onPressed: () {
-                        double value = double.tryParse(_controller.text) ?? 0.0;
-                        globals.write!.write(utf8.encode(value.toString()));
-                        _controller.clear();
+                      onPressed: () async {
+                        var injectionFlag = await canInject();
+                        if (injectionFlag) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                  'You need to wait 2 hours from the last injection'),
+                            ),
+                          );
+                        } else {
+                          int value = int.tryParse(_controller.text) ?? 0;
+                          if (value < 1 || value > 255) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                    'Carbs value must be between 1 and 255'),
+                              ),
+                            );
+                          } else {
+                            try {
+                              String hexString = value.toRadixString(16);
+                              globals.write!.write(utf8.encode(hexString));
+                            } catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                      'Device is not connected. Or check again later'),
+                                ),
+                              );
+                            }
+                          }
+
+                          _controller.clear();
+                        }
                       },
                       child: Padding(
                         padding: const EdgeInsets.only(
@@ -100,7 +136,6 @@ class _InjectionScreenState extends State<InjectionScreen> {
                       ),
                     ),
                   ),
-                  Text(flag ? "yes" : "no"),
                   Text(globals.read.toString()),
                 ],
               ),
