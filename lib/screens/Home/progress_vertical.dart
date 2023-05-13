@@ -47,7 +47,7 @@ class ProgressVertical extends StatelessWidget {
                             shape: BoxShape.rectangle,
                             color: AppTheme.primaryColor,
                           ),
-                          height: constraints.maxHeight * (value / 100),
+                          height: constraints.maxHeight * (value / 250),
                           width: constraints.maxWidth,
                         ),
                       ),

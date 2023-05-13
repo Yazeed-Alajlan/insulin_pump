@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:insulin_pump/screens/Authentication/SignInScreen.dart';
+import 'package:insulin_pump/utils/AppTheme.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({
@@ -20,6 +21,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Settings"),
+        backgroundColor: AppTheme.primaryColor,
       ),
       body: Center(
         child: Container(
@@ -47,7 +49,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       title: "People", icon: Icons.contacts_outlined),
                 ],
               ),
-              const Divider(),
               const Divider(),
               _SingleSection(
                 children: [

@@ -281,43 +281,43 @@ class _HomeScreenState extends State<HomeScreen> {
                                             scrollDirection: Axis.horizontal,
                                             children: <Widget>[
                                               ProgressVertical(
-                                                value: 50,
+                                                value: 220,
+                                                date: "5/6",
+                                                isShowDate: true,
+                                              ),
+                                              ProgressVertical(
+                                                value: 170,
+                                                date: "5/7",
+                                                isShowDate: false,
+                                              ),
+                                              ProgressVertical(
+                                                value: 180,
+                                                date: "5/8",
+                                                isShowDate: false,
+                                              ),
+                                              ProgressVertical(
+                                                value: 200,
+                                                date: "5/9",
+                                                isShowDate: true,
+                                              ),
+                                              ProgressVertical(
+                                                value: 160,
+                                                date: "5/10",
+                                                isShowDate: false,
+                                              ),
+                                              ProgressVertical(
+                                                value: 150,
                                                 date: "5/11",
-                                                isShowDate: true,
+                                                isShowDate: false,
                                               ),
                                               ProgressVertical(
-                                                value: 50,
+                                                value: 100,
                                                 date: "5/12",
-                                                isShowDate: false,
+                                                isShowDate: true,
                                               ),
                                               ProgressVertical(
-                                                value: 45,
+                                                value: max.toInt(),
                                                 date: "5/13",
-                                                isShowDate: false,
-                                              ),
-                                              ProgressVertical(
-                                                value: 30,
-                                                date: "5/14",
-                                                isShowDate: true,
-                                              ),
-                                              ProgressVertical(
-                                                value: 50,
-                                                date: "5/15",
-                                                isShowDate: false,
-                                              ),
-                                              ProgressVertical(
-                                                value: 20,
-                                                date: "5/16",
-                                                isShowDate: false,
-                                              ),
-                                              ProgressVertical(
-                                                value: 45,
-                                                date: "5/17",
-                                                isShowDate: true,
-                                              ),
-                                              ProgressVertical(
-                                                value: 67,
-                                                date: "5/18",
                                                 isShowDate: false,
                                               ),
                                             ],
@@ -406,7 +406,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           unit: "",
                                           color: Constants.darkOrange,
                                           image: "assets/icons/syringe.png",
-                                          remarks: "10");
+                                          remarks:
+                                              globals.injectCounter.toString());
                                     // default:
                                     //   return GridItem(
                                     //     status: "Rest",

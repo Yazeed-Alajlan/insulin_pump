@@ -125,6 +125,7 @@ class _InjectionScreenState extends State<InjectionScreen> {
                               else
                                 hexString = "1" + hexString;
                               globals.write!.write(utf8.encode(hexString));
+                              globals.injectCounter++;
                               addData();
                             } catch (e) {
                               ScaffoldMessenger.of(context).showSnackBar(

@@ -74,12 +74,12 @@ class _DataScreenState extends State<DataScreen> {
         double valueInDouble = double.parse(utf8.decode(value).toString());
 
         if (valueInDouble > 200.0) globals.write!.write(utf8.encode("2"));
-        if (valueInDouble > 60.0) globals.write!.write(utf8.encode("3"));
+        if (valueInDouble < 60.0) globals.write!.write(utf8.encode("3"));
 
         setState(() {
           globals.lastReading = utf8.decode(value).toString();
         });
-        // addData();
+        addData();
       }
     });
     discoverServices();
