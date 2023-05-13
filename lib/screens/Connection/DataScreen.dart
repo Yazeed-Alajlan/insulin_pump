@@ -41,7 +41,9 @@ class _DataScreenState extends State<DataScreen> {
   void addData() {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('yyyy-MM-dd').format(now);
-    if (globals.lastReading != "0") {
+    if (globals.lastReading != "0" ||
+        globals.lastReading != "" ||
+        globals.read!.lastValue != "") {
       FirebaseFirestore.instance.collection('Records').add({
         "Value": utf8.decode(globals.read!.lastValue).toString(),
         "Date": formattedDate,
@@ -58,10 +60,10 @@ class _DataScreenState extends State<DataScreen> {
         timer.cancel();
       }
     });
-    Timer.periodic(Duration(seconds: 30), (timer) async {
+    Timer.periodic(Duration(seconds: 4), (timer) async {
       if (globals.read == null) discoverServices();
 
-      if (globals.read != null) {
+      if (globals.read != null || globals.read != "") {
         // Read data from the characteristic
         await globals.read!.read();
 
@@ -69,11 +71,15 @@ class _DataScreenState extends State<DataScreen> {
         List<int> value = await globals.read!.read();
         print('Received data:');
         print(utf8.decode(value).toString());
-        // globals.lastReading = utf8.decode(value).toString();
+        double valueInDouble = double.parse(utf8.decode(value).toString());
+
+        if (valueInDouble > 200.0) globals.write!.write(utf8.encode("2"));
+        if (valueInDouble > 60.0) globals.write!.write(utf8.encode("3"));
+
         setState(() {
           globals.lastReading = utf8.decode(value).toString();
         });
-        addData();
+        // addData();
       }
     });
     discoverServices();

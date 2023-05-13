@@ -29,6 +29,14 @@ class _InjectionScreenState extends State<InjectionScreen> {
     return values.isNotEmpty;
   }
 
+  void addData() {
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('yyyy-MM-dd HH:mm').format(now);
+    FirebaseFirestore.instance
+        .collection('Injections')
+        .add({"injectedAt": formattedDate});
+  }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -112,7 +120,12 @@ class _InjectionScreenState extends State<InjectionScreen> {
                           } else {
                             try {
                               String hexString = value.toRadixString(16);
+                              if (hexString.length == 1)
+                                hexString = "10" + hexString;
+                              else
+                                hexString = "1" + hexString;
                               globals.write!.write(utf8.encode(hexString));
+                              addData();
                             } catch (e) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
