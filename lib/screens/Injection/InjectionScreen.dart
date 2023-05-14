@@ -150,7 +150,7 @@ class _InjectionScreenState extends State<InjectionScreen> {
                       ),
                     ),
                   ),
-                  Text(globals.read.toString()),
+                  // Text(globals.read.toString()),
                 ],
               ),
             ),
